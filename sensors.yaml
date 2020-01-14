@@ -1,0 +1,52 @@
+# Sensor data from each Arlo camera
+- platform: aarlo
+  monitored_conditions:
+    - captured_today
+    - last_capture
+    - battery_level
+    - signal_strength
+
+# 2 sensors to gather current and forecast weather data from BOM
+- platform: bom
+  station: IDT60901.94970
+  monitored_conditions:
+    - weather
+    - rain_trace
+    - air_temp
+    - apparent_t
+
+- platform: bom_forecast
+  product_id: IDT13600
+  name: Hobart Forecast
+  forecast_days: 6
+  rest_of_today: true
+  friendly: false
+  friendly_state_format: '{max}, {summary}'
+  monitored_conditions:
+    - 'max'
+    - 'min'
+    - 'chance_of_rain'
+    - 'possible_rainfall'
+    - 'summary'
+    - 'detailed_summary'
+    - 'icon'
+    - 'uv_alert'
+    - 'fire_danger'
+
+# Gets the temp value from the Lounge AC climate object
+- platform: template
+  sensors:
+    lounge_temperature:
+      friendly_name: "Lounge Temperature"
+      unit_of_measurement: 'degrees'
+      value_template: "{{ state_attr('climate.lounge_ac', 'current_temperature') }}"
+
+# Gets the Dark value from Office Sensor Light Level
+- platform: template
+  sensors:
+    office_dark:
+      friendly_name: "Office Dark"
+      value_template: "{{ state_attr('sensor.office_sensor_light_level', 'dark') }}"
+
+# 3rd party Hue Sensor support - for the Dimmer switches
+- platform: huesensor

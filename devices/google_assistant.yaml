@@ -1,0 +1,2 @@
+project_id: !secret ga_project_id
+api_key: !secret ga_api_key

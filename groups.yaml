@@ -1,0 +1,24 @@
+family:
+  name: Family
+  entities:
+    - person.jimmy
+    - person.rose
+    - person.callum
+
+james_phone_wifi_group:
+  name: James' Phone on Wifi
+    - device_tracker.james_phone_wifi
+    - device_tracker.james_phone_wifi_2
+    - device_tracker.james_phone_wifi_3
+
+rose_phone_wifi_group:
+  name: Rose's Phone on Wifi
+    - device_tracker.rose_phone_wifi
+    - device_tracker.rose_phone_wifi_2
+    - device_tracker.rose_phone_wifi_3
+
+callum_phone_wifi_group:
+  name: Callum's Phone on Wifi
+    - device_tracker.callum_phone_wifi
+    - device_tracker.callum_phone_wifi_2
+    - device_tracker.callum_phone_wifi_3

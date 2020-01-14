@@ -1,0 +1,174 @@
+- id: deck_light_on
+  alias: Lights - Turn on deck_light at sunset
+  description: ''
+  trigger:
+  - event: sunset
+    platform: sun
+  condition: []
+  action:
+  - alias: ''
+    data: {}
+    entity_id: light.deck_light
+    service: light.turn_on
+- id: deck_light_off
+  alias: Lights - Turn off deck_light at sunrise
+  description: ''
+  trigger:
+  - event: sunrise
+    platform: sun
+  condition: []
+  action:
+  - entity_id: light.deck_light
+    service: light.turn_off
+- id: set_arlo_home
+  alias: Cameras - Disarm when home
+  description: Sets the Arlo system to Home mode
+  trigger:
+  - entity_id: group.family
+    from: not_home
+    platform: state
+    to: home
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.aarlo_home_security
+    state: armed_away
+  action:
+  - alias: ''
+    data: {}
+    entity_id: alarm_control_panel.aarlo_home_security
+    service: alarm_control_panel.alarm_arm_home
+- id: set_arlo_away
+  alias: Cameras - Arm when not home
+  description: Set the Arlo system to Away mode when nobody's home
+  trigger:
+  - entity_id: group.family
+    from: home
+    platform: state
+    to: not_home
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.aarlo_home_security
+    state: armed_home
+  action:
+  - entity_id: alarm_control_panel.aarlo_home_security
+    service: alarm_control_panel.alarm_arm_away
+- id: front_doorbell
+  alias: Cameras - Doorbell at Front Door
+  description: Rings the doorbell in the house and bar when someone's at the front
+    door
+  trigger:
+  - entity_id: binary_sensor.aarlo_motion_front_door
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  - after: 07:00
+    before: '21:00'
+    condition: time
+  action:
+  - data:
+      media_content_id: https://hass.easternbishops.duckdns.org/local/Classic-doorbell-sound.mp3
+      media_content_type: audio/mp3
+    entity_id: media_player.kitchen_display
+    service: media_player.play_media
+  - data:
+      media_content_id: https://hass.easternbishops.duckdns.org/local/Classic-doorbell-sound.mp3
+      media_content_type: audio/mp3
+    entity_id: media_player.bar_home_mini
+    service: media_player.play_media
+  - entity_id: media_player.kitchen_display
+    service: media_player.media_stop
+  - entity_id: media_player.bar_home_mini
+    service: media_player.media_stop
+- id: '1578890862054'
+  alias: Lights - Lounge Lights when dark
+  description: Turn on the lights if we're home and it's getting dark
+  trigger:
+  - event: sunset
+    offset: -00:30:00
+    platform: sun
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  action:
+  - alias: ''
+    data: {}
+    entity_id: light.lounge
+    service: light.turn_on
+- id: '1578901183427'
+  alias: Lights - Office Light On If PC Boots
+  description: Turn the office light on if the room is dark and the pc is on
+  trigger:
+  - entity_id: binary_sensor.jimmy_pc
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: sensor.office_dark
+    state: 'True'
+  action:
+  - entity_id: light.office
+    service: light.turn_on
+- id: '1578901292724'
+  alias: Lights - Office Light Off With PC
+  description: Turn the office light off when the PC is shut down
+  trigger:
+  - entity_id: binary_sensor.jimmy_pc
+    from: 'on'
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: light.office
+    state: 'on'
+  action:
+  - entity_id: light.office
+    service: light.turn_off
+- id: '1578901442967'
+  alias: Lights - Office Light On If Dark
+  description: If the PC is already on and it gets dark, turn the light on
+  trigger:
+  - entity_id: sensor.office_dark
+    from: 'False'
+    platform: state
+    to: 'True'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.jimmy_pc
+    state: 'on'
+  action:
+  - entity_id: light.office
+    service: light.turn_on
+- id: '1578957557074'
+  alias: Lights - Office Motion Sensor On
+  description: If the PC is off, use the motion sensor to control the light
+  trigger:
+  - entity_id: binary_sensor.office_sensor_motion
+    platform: state
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.jimmy_pc
+    state: 'off'
+  action:
+  - entity_id: light.office
+    service: light.turn_on
+- id: '1578957732416'
+  alias: Lights - Office Motion Sensor Off
+  description: Turn off the lights if no motion for 10 mins and the PC is off
+  trigger:
+  - entity_id: binary_sensor.office_sensor_motion
+    for: 00:02
+    platform: state
+    to: 'off'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.jimmy_pc
+    state: 'off'
+  action:
+  - entity_id: light.office
+    service: light.turn_off

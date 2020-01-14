@@ -1,0 +1,21 @@
+letsencrypt:
+  image: linuxserver/letsencrypt
+  container_name: letsencrypt
+  restart: unless-stopped
+  cap_add:
+    - NET_ADMIN
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /home/pi/docker/letsencrypt:/config
+  environment:
+    - PGID=1000
+    - PUID=1000
+    - EMAIL=jimmybish@gmail.com
+    - URL=easternbishops.duckdns.org
+    - SUBDOMAINS=wildcard 
+    - VALIDATION=duckdns
+    - TZ=Australia/Hobart
+    - DUCKDNSTOKEN=732bc745-60fa-49d6-a68c-a8bff079f8d0
+  ports:
+    - "80:80"
+    - "443:443"

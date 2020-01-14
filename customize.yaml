@@ -1,0 +1,9 @@
+light.deck_light:
+  friendly_name: Deck Light
+sensor.lounge_temperature:
+  friendly_name: Lounge Temp
+  icon: mdi:thermometer
+device_tracker.sm_g930f_2:
+  friendly_name: Rose's Phone
+device_tracker.sm_a505yn:
+  friendly_name: Callum's Phone

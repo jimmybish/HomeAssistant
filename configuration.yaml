@@ -1,0 +1,109 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+light: !include devices/lights.yaml
+sensor: !include sensors.yaml
+camera: !include devices/cameras.yaml
+zone: !include zones.yaml
+google_assistant: !include devices/google_assistant.yaml
+
+homeassistant:
+  customize: !include customize.yaml
+
+http:
+  login_attempts_threshold: 5
+  ip_ban_enabled: true
+  base_url: !secret base_url
+  use_x_forwarded_for: true
+  trusted_proxies: 
+    - 192.168.1.30
+    - 127.0.0.1
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+logger:
+  default: info
+
+media_player:
+  - platform: spotify
+    client_id: !secret spotify_id
+    client_secret: !secret spotify_secret
+
+plex:
+  host: !secret plex_host
+  port: 32400
+  server: SHIELD Android TV
+  token: !secret plex_key
+  media_player:
+    use_episode_art: true
+
+climate:
+  - platform: sensibo
+    api_key: !secret sensibo_key
+
+# Netgear Orbi Wifi access points for device tracking
+device_tracker:
+  - platform: netgear
+    host: !secret router_host
+    port: 80
+    password: !secret router_pass
+    accesspoints:
+      - !secret bar_orbi_mac
+      - !secret callum_orbi_mac
+    devices:
+      - !secret jimmy_phone_mac
+      - !secret rose_phone_mac
+      - !secret callum_phone_mac
+
+
+# The below are all for integration with the Arlo camera system
+ffmpeg:
+  ffmpeg_bin: /usr/bin/ffmpeg
+
+aarlo:
+  username: !secret arlo_user
+  password: !secret arlo_pass
+  refresh_devices_every: 2
+
+alarm_control_panel:
+  - platform: aarlo
+    home_mode_name: Home
+    away_mode_name: Not_Home
+
+binary_sensor:
+  - platform: aarlo
+    monitored_conditions:
+      - motion
+      - sound
+      - ding
+
+switch:
+  - platform: aarlo
+    siren: True
+    all_sirens: True
+    snapshot: True
+    siren_volume: 1
+    siren_duration: 10
+
+
+# Know whether my PC is powered on or not
+binary_sensor:
+  - platform: ping
+    host: 192.168.1.25
+    name: Jimmy-PC
+    count: 1
+    scan_interval: 5
