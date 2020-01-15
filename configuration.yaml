@@ -19,6 +19,7 @@ sensor: !include sensors.yaml
 camera: !include devices/cameras.yaml
 zone: !include zones.yaml
 google_assistant: !include devices/google_assistant.yaml
+binary_sensor: !include binary_sensors.yaml
 
 homeassistant:
   customize: !include customize.yaml
@@ -71,6 +72,7 @@ device_tracker:
 
 
 # The below are all for integration with the Arlo camera system
+# See binary_sensor for Aarlo sensors
 ffmpeg:
   ffmpeg_bin: /usr/bin/ffmpeg
 
@@ -84,13 +86,6 @@ alarm_control_panel:
     home_mode_name: Home
     away_mode_name: Not_Home
 
-binary_sensor:
-  - platform: aarlo
-    monitored_conditions:
-      - motion
-      - sound
-      - ding
-
 switch:
   - platform: aarlo
     siren: True
@@ -100,10 +95,3 @@ switch:
     siren_duration: 10
 
 
-# Know whether my PC is powered on or not
-binary_sensor:
-  - platform: ping
-    host: 192.168.1.25
-    name: Jimmy-PC
-    count: 1
-    scan_interval: 5

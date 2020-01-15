@@ -65,7 +65,7 @@
     entity_id: group.family
     state: home
   - after: 07:00
-    before: '21:00'
+    before: '22:00'
     condition: time
   action:
   - data:
@@ -78,10 +78,6 @@
       media_content_type: audio/mp3
     entity_id: media_player.bar_home_mini
     service: media_player.play_media
-  - entity_id: media_player.kitchen_display
-    service: media_player.media_stop
-  - entity_id: media_player.bar_home_mini
-    service: media_player.media_stop
 - id: '1578890862054'
   alias: Lights - Lounge Lights when dark
   description: Turn on the lights if we're home and it's getting dark
@@ -154,6 +150,9 @@
   - condition: state
     entity_id: binary_sensor.jimmy_pc
     state: 'off'
+  - condition: state
+    entity_id: sensor.office_dark
+    state: 'True'
   action:
   - entity_id: light.office
     service: light.turn_on
