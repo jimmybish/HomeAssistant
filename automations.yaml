@@ -109,21 +109,6 @@
   action:
   - entity_id: light.office
     service: light.turn_on
-- id: '1578901292724'
-  alias: Lights - Office Light Off With PC
-  description: Turn the office light off when the PC is shut down
-  trigger:
-  - entity_id: binary_sensor.jimmy_pc
-    from: 'on'
-    platform: state
-    to: 'off'
-  condition:
-  - condition: state
-    entity_id: light.office
-    state: 'on'
-  action:
-  - entity_id: light.office
-    service: light.turn_off
 - id: '1578901442967'
   alias: Lights - Office Light On If Dark
   description: If the PC is already on and it gets dark, turn the light on
@@ -157,11 +142,11 @@
   - entity_id: light.office
     service: light.turn_on
 - id: '1578957732416'
-  alias: Lights - Office Motion Sensor Off
+  alias: Lights - Office Light Off Without Motion
   description: Turn off the lights if no motion for 10 mins and the PC is off
   trigger:
   - entity_id: binary_sensor.office_sensor_motion
-    for: 00:02
+    for: 00:10
     platform: state
     to: 'off'
   condition:
@@ -171,3 +156,31 @@
   action:
   - entity_id: light.office
     service: light.turn_off
+- id: '1579414572379'
+  alias: HA - Restart daily
+  description: Some add-ons suck and only work after a restart
+  trigger:
+  - at: 04:00
+    platform: time
+  condition: []
+  action:
+  - service: homeassistant.restart
+- id: '1579558371441'
+  alias: Notification - Take the rubbish out
+  description: ''
+  trigger:
+  - event: sunset
+    offset: 00:30
+    platform: sun
+  condition:
+  - condition: state
+    entity_id: group.family
+    state: home
+  - condition: state
+    entity_id: sensor.rubbish_night
+    state: Today
+  action:
+  - service: tts.google_translate_say
+    data:
+      message: Its rubbish night. Time to take out the bins
+      entity_id: media_player.kitchen_display
