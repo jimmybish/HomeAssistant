@@ -1,0 +1,11 @@
+default: warning
+logs:
+  custom_components.aarlo: warning
+  custom_components.aarlo.alarm_control_panel: info
+  custom_components.aarlo.binary_sensor: info
+  custom_components.aarlo.camera: info
+  custom_components.aarlo.light: warning
+  custom_components.aarlo.media_player: warning
+  custom_components.aarlo.sensor: warning
+  custom_components.aarlo.switch: warning
+  pyaarlo: warning

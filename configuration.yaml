@@ -10,6 +10,7 @@ default_config:
 tts:
   - platform: google_translate
 
+logger: !include logger.yaml
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
@@ -18,7 +19,7 @@ light: !include devices/lights.yaml
 sensor: !include sensors.yaml
 camera: !include devices/cameras.yaml
 zone: !include zones.yaml
-google_assistant: !include devices/google_assistant.yaml
+# google_assistant: !include devices/google_assistant.yaml
 binary_sensor: !include binary_sensors.yaml
 
 homeassistant:
@@ -28,16 +29,12 @@ http:
   login_attempts_threshold: 5
   ip_ban_enabled: true
   base_url: !secret base_url
-  use_x_forwarded_for: true
-  trusted_proxies: 
-    - 192.168.1.30
-    - 127.0.0.1
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
 
 frontend:
   themes: !include_dir_merge_named themes
 
-logger:
-  default: info
 
 media_player:
   - platform: spotify
@@ -80,18 +77,21 @@ aarlo:
   username: !secret arlo_user
   password: !secret arlo_pass
   refresh_devices_every: 2
+  stream_timeout: 120
+  reconnect_every: 30
 
 alarm_control_panel:
   - platform: aarlo
     home_mode_name: Home
     away_mode_name: Not_Home
+    night_mode_name: Night
 
 switch:
   - platform: aarlo
     siren: True
     all_sirens: True
     snapshot: True
-    siren_volume: 1
+    siren_volume: 8
     siren_duration: 10
 
 

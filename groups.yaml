@@ -5,6 +5,12 @@ family:
     - person.rose
     - person.callum
 
+adults:
+  name: Adults
+  entities:
+    - person.jimmy
+    - person.rose
+
 james_phone_wifi_group:
   name: James' Phone on Wifi
     - device_tracker.james_phone_wifi
