@@ -12,3 +12,5 @@
     - sound
     - ding
 
+# Hue Sensors - Enables the light controllers and other thingies
+- platform: huesensor

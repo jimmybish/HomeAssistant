@@ -4,6 +4,7 @@
 !*.gitignore
 !*.md
 !devices
+!flows.json
 
 secrets.yaml
 known_devices.yaml

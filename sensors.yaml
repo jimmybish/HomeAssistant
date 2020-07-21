@@ -47,6 +47,3 @@
     office_dark:
       friendly_name: "Office Dark"
       value_template: "{{ state_attr('sensor.office_sensor_light_level', 'dark') }}"
-
-# 3rd party Hue Sensor support - for the Dimmer switches
-- platform: huesensor

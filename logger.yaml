@@ -1,4 +1,4 @@
-default: warning
+default: info
 logs:
   custom_components.aarlo: warning
   custom_components.aarlo.alarm_control_panel: info
@@ -8,4 +8,5 @@ logs:
   custom_components.aarlo.media_player: warning
   custom_components.aarlo.sensor: warning
   custom_components.aarlo.switch: warning
+  homeassistant.components.mqtt: debug
   pyaarlo: warning

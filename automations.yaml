@@ -20,63 +20,20 @@
   action:
   - entity_id: light.deck_light
     service: light.turn_off
-- id: set_arlo_home
-  alias: Cameras - Disarm when home
-  description: Sets the Arlo system to Home mode
-  trigger:
-  - entity_id: group.family
-    platform: state
-    to: home
-  condition:
-  - condition: state
-    entity_id: alarm_control_panel.aarlo_home_security
-    state: armed_away
-  action:
-  - alias: ''
-    data: {}
-    entity_id: alarm_control_panel.aarlo_home_security
-    service: alarm_control_panel.alarm_arm_home
-- id: set_arlo_away
-  alias: Cameras - Arm when not home
-  description: Set the Arlo system to Away mode when nobody's home
-  trigger:
-  - entity_id: group.family
-    from: home
-    platform: state
-    to: not_home
-  condition:
-  - condition: state
-    entity_id: alarm_control_panel.aarlo_home_security
-    state: armed_home
-  action:
-  - entity_id: alarm_control_panel.aarlo_home_security
-    service: alarm_control_panel.alarm_arm_away
 - id: front_doorbell
-  alias: Cameras - Doorbell at Front Door
-  description: Rings the doorbell in the house and bar when someone's at the front
-    door
+  alias: Lights - Front Door On
+  description: Turn on the front light for 2 mins
   trigger:
   - entity_id: binary_sensor.aarlo_motion_front_door
     platform: state
     to: 'on'
   condition:
-  - condition: state
-    entity_id: group.family
-    state: home
-  - after: 07:00
-    before: '22:00'
-    condition: time
+  - after: sunset
+    condition: sun
   action:
-  - data:
-      media_content_id: https://easternbishops.duckdns.org/local/Classic-doorbell-sound.mp3
-      media_content_type: audio/mp3
-    entity_id: media_player.kitchen_display
-    service: media_player.play_media
-  - data:
-      media_content_id: https://easternbishops.duckdns.org/local/Classic-doorbell-sound.mp3
-      media_content_type: audio/mp3
-    entity_id: media_player.bar_home_mini
-    service: media_player.play_media
+  - data: {}
+    entity_id: light.front_door
+    service: light.turn_on
 - id: '1578890862054'
   alias: Lights - Lounge Lights when dark
   description: Turn on the lights if we're home and it's getting dark
@@ -125,15 +82,12 @@
     service: light.turn_on
 - id: '1578957557074'
   alias: Lights - Office Motion Sensor On
-  description: If the PC is off, use the motion sensor to control the light
+  description: Turn on the office light if there's motion
   trigger:
   - entity_id: binary_sensor.office_sensor_motion
     platform: state
     to: 'on'
   condition:
-  - condition: state
-    entity_id: binary_sensor.jimmy_pc
-    state: 'off'
   - condition: state
     entity_id: sensor.office_dark
     state: 'True'
@@ -148,10 +102,7 @@
     for: 00:10
     platform: state
     to: 'off'
-  condition:
-  - condition: state
-    entity_id: binary_sensor.jimmy_pc
-    state: 'off'
+  condition: []
   action:
   - entity_id: light.office
     service: light.turn_off
@@ -183,3 +134,16 @@
       entity_id: media_player.kitchen_display
       message: Its rubbish night. Time to take out the bins
     service: tts.google_translate_say
+- id: '1590219322121'
+  alias: Lights - Front Door Off
+  description: Turn off after 1 min
+  trigger:
+  - entity_id: binary_sensor.aarlo_motion_front_door
+    for: 00:01
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data: {}
+    entity_id: light.front_door
+    service: light.turn_off
